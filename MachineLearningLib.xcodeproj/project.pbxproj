@@ -6,10 +6,17 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXFileReference section */
+		E8A93DC218CF3A3D00D9843B /* mla_compute_cost.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = mla_compute_cost.m; sourceTree = "<group>"; };
+		E8A93DC318CF3AC900D9843B /* mla_gradient_descent.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = mla_gradient_descent.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
 /* Begin PBXGroup section */
 		E8A93DBB18CF3A0C00D9843B = {
 			isa = PBXGroup;
 			children = (
+				E8A93DC218CF3A3D00D9843B /* mla_compute_cost.m */,
+				E8A93DC318CF3AC900D9843B /* mla_gradient_descent.m */,
 			);
 			sourceTree = "<group>";
 		};
