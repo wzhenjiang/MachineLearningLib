@@ -95,7 +95,7 @@ theta = zeros(3, 1);
 printf('Theta computed from the normal equations: \n');
 printf(' %f \n', theta);
 
-[X, mu, sigma] = mla_mean_normalization([1650, 3], mu, sigma);
+[X mu sigma] = mla_mean_normalization([1650, 3], mu, sigma);
 X = [1, X];
 
 price = X * theta; 
