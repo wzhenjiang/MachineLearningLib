@@ -77,7 +77,7 @@ printf(' x = [%.0f %.0f], y = %.0f \n', [X(1:10,:) y(1:10,:)]');
 % Scale features and set them to zero mean
 fflush(stdout);
 
-[X mu sigma] = mla_feature_normalization(X);
+[X mu sigma] = mla_mean_normalization(X);
 
 % Print out Normalization result
 printf('First 10 examples from normalized result: \n');
@@ -95,8 +95,8 @@ theta = zeros(3, 1);
 printf('Theta computed from the normal equations: \n');
 printf(' %f \n', theta);
 
-X = mla_feature_normalization([1650, 3], mu, sigma);
-X = [1 X];
+[X, mu, sigma] = mla_mean_normalization([1650, 3], mu, sigma);
+X = [1, X];
 
 price = X * theta; 
 printf('Price projected with [1650,3]: %f \n', price);
