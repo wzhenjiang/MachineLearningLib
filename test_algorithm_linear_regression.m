@@ -99,7 +99,6 @@ printf(' %f \n', theta);
 [X mu sigma] = mla_mean_normalization([1650, 3], mu, sigma);
 X = [1, X];
 
-
 price = X * theta; 
 printf('Price projected with [1650,3]: %f \n', price);
 
@@ -116,8 +115,8 @@ X = [ones(m, 1) X];
 theta = mla_normal_equation(X, y);
 
 % Display normal equation's result
-fprintf('Theta computed from the normal equations: \n');
-fprintf(' %f \n', theta);
+printf('Theta computed from the normal equations: \n');
+printf(' %f \n', theta);
 
 X = [1 1650 3];
 
