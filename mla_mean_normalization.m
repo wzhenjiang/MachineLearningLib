@@ -17,10 +17,11 @@ if size(mu,1) == 0  || size(sigma,1) == 0
 		sigma = std(data);
 	else
 		sigma = range(data);
+	end;
 end;
 
 % form normalized_data
-[m,n] = size ( data )
+[m,n] = size ( data );
 
 for i = 1: m
 	normalized_data = [normalized_data; (data(i,:) - mu ) ./ sigma];

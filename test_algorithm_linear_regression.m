@@ -79,6 +79,7 @@ fflush(stdout);
 
 [X mu sigma] = mla_mean_normalization(X);
 
+
 % Print out Normalization result
 printf('First 10 examples from normalized result: \n');
 printf(' x = [%.5f %.5f], y = %.0f \n', [X(1:10,:) y(1:10,:)]');
@@ -97,6 +98,7 @@ printf(' %f \n', theta);
 
 [X mu sigma] = mla_mean_normalization([1650, 3], mu, sigma);
 X = [1, X];
+
 
 price = X * theta; 
 printf('Price projected with [1650,3]: %f \n', price);
