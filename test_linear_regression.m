@@ -1,11 +1,11 @@
-function test_algorithm_linear_regression()
-%% Purpose: this function is to test if mla_(gradient_descent, normal_equation, feature_normalization, compute_cost) works right
+function test_linear_regression()
+%% Purpose: this function is to test if mla_(linear_regression_gradient_descent, linear_regression_normal_equation, mean_normalization, linear_regression_cost) works right
 %% Purpose: this function is to test if mlp_(scatter) works right
 
 
 clear ; close all; clc
 
-%% =================== Part 1: test mla_gradient_descent ===================
+%% =================== Part 1: test mla_linear_regression_gradient_descent ===================
 data = load('test_data_ex1data1.mlt');
 iteration = 1500;
 alpha = 0.01;
@@ -14,11 +14,11 @@ X = data(:,1);
 X = [ones(size(X,1),1),X];
 y = data(:,2);
 theta = zeros(2,1);
-cost = mla_compute_cost(X, y, theta);
+cost = mla_linear_regression_cost(X, y, theta);
 printf('Cost of initial theta: %f\n', cost);
 
-theta = mla_gradient_descent(X, y, theta, alpha, iteration);
-cost = mla_compute_cost(X, y, theta);
+theta = mla_linear_regression_gradient_descent(X, y, theta, alpha, iteration);
+cost = mla_linear_regression_cost(X, y, theta);
 printf('Cost of final theta: %f\n', cost);
 
 % print theta to screen
@@ -37,15 +37,15 @@ fflush(stdout);
 
 
 
-%% =================== Part 2: test mla_normal_euquation ===================
+%% =================== Part 2: test mla_linear_regression_normal_euquation ===================
 data = load('test_data_ex1data1.mlt');
 
 X = data(:,1);
 X = [ones(size(X,1),1),X];
 y = data(:,2);
 
-theta = mla_normal_equation(X, y);
-cost = mla_compute_cost(X, y, theta);
+theta = mla_linear_regression_normal_equation(X, y);
+cost = mla_linear_regression_cost(X, y, theta);
 printf('Cost of final theta: %f\n', cost);
 
 % print theta to screen
@@ -63,7 +63,7 @@ printf('Profit prediction result of population = 70,000 : [%f]\n',
 fflush(stdout);
 
 	
-%% =================== Part 3: test mla_feature_normalization ===================
+%% =================== Part 3: test mla_mean_normalization ===================
 
 data = load('test_data_ex1data2.mlt');
 X = data(:, 1:2);
@@ -92,7 +92,7 @@ alpha = 0.01;
 num_iters = 400;
 
 theta = zeros(3, 1);
-[theta, J_history] = mla_gradient_descent(X, y, theta, alpha, num_iters, true);
+[theta, J_history] = mla_linear_regression_gradient_descent(X, y, theta, alpha, num_iters, true);
 printf('Theta computed from the normal equations: \n');
 printf(' %f \n', theta);
 
@@ -112,7 +112,7 @@ m = length(y);
 X = [ones(m, 1) X];
 
 % Calculate the parameters from the normal equation
-theta = mla_normal_equation(X, y);
+theta = mla_linear_regression_normal_equation(X, y);
 
 % Display normal equation's result
 printf('Theta computed from the normal equations: \n');

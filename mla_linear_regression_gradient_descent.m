@@ -1,4 +1,4 @@
-function [theta_output, cost_history] = mla_gradient_descent(X, y, theta, alpha = 0.1, iteration = 10, history = false)
+function [theta_output, cost_history] = mla_linear_regression_gradient_descent(X, y, theta, alpha = 0.1, iteration = 10, history = false)
 %% Purpose:		Generate new_theta for one step further
 %% Purpose:		This function is part of gradient descent algorithm
 %% Attention:	X0 should be added in X already
@@ -8,7 +8,7 @@ theta_output = theta;
 cost_history = [];
 
 if history
-	cost_history = [mla_compute_cost(X,y,theta)];
+	cost_history = [mla_linear_regression_cost(X,y,theta)];
 end;
 
 for iter = 1: iteration
@@ -32,7 +32,7 @@ for iter = 1: iteration
 	% update theta simultaneously
 	theta_output = theta_output - delta;
 	if history
-		cost_history = [cost_history; mla_compute_cost(X,y,theta_output)];
+		cost_history = [cost_history; mla_linear_regression_cost(X,y,theta_output)];
 	end;
 
 end;
