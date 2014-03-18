@@ -59,7 +59,7 @@ diff_hidden_matrix = [diff_last_layer];
 
 for i = 1: num_hidden_layer - 1
 	a_part = a_hidden_matrix(current_pos - m + 1:current_pos,:);
-	current_pos = current_pos - m;
+	current_pos -= m;
 	a_part = a_part .* ( 1 - a_part);
 	theta_this_layer = theta_hidden(end - n_hidden_layer*i + 1:end - n_hidden_layer*(i-1),:);
 	diff_last_layer = (diff_last_layer * theta_this_layer)(:,2:end) .* a_part;
@@ -76,9 +76,9 @@ end;
 
 if lambda ~= 0
 	
-	penalty_input = lambda * theta_input;
-	penalty_output = lambda * theta_output;
-	penalty_hidden = lambda * theta_hidden;
+	penalty_input = lambda/m * theta_input;
+	penalty_output = lambda/m * theta_output;
+	penalty_hidden = lambda/m * theta_hidden;
 	penalty_input(:,1) = 0;	% no penalty for theta0
 	penalty_output(:,1) = 0;	% no penalty for theta0
 	penalty_hidden(:,1) = 0;	% no penalty for theta0
@@ -100,7 +100,7 @@ for i = 1: num_hidden_layer - 1
 	if lambda == 0 
 		penalty_this_layer = 0;
 	else
-		penalty_this_layer = penalty_hidden( (i-1) * n_hidden_layer + 1: (i-1) * n_hidden_layer + n_hidden_layer, :);
+		penalty_this_layer = penalty_hidden( (i-1) * n_hidden_layer + 1: i * n_hidden_layer, :);
 	end;
 	a_this_layer = a_hidden_matrix(1 + a_current_pos: m + a_current_pos,:);
 	a_current_pos += m;
@@ -111,8 +111,14 @@ end;
 a_last_hidden_layer = a_hidden_matrix(a_current_pos + 1: a_current_pos + m, :);
 deriv_theta_output = 1 / m * diff_output' * [ones(m,1), a_last_hidden_layer] + penalty_output;
 
+deriv_theta_hidden_vec = [];
+deriv_pos = 0;
+for i = 1: num_hidden_layer - 1
+	deriv_theta_hidden_vec = [deriv_theta_hidden_vec; deriv_theta_hidden(deriv_pos + 1: deriv_pos + n_hidden_layer,:)(:)];
+	deriv_pos += n_hidden_layer;
+end;
 % convert deriv matrix into vec
-gradientvec = [deriv_theta_input(:); deriv_theta_hidden(:); deriv_theta_output(:)];
+gradientvec = [deriv_theta_input(:); deriv_theta_hidden_vec; deriv_theta_output(:)];
 
 %% ==================== gradient checking =========================
 %% Please turn off the checking flag once implemtatnion is checked
@@ -120,9 +126,8 @@ gradientvec = [deriv_theta_input(:); deriv_theta_hidden(:); deriv_theta_output(:
 if gradient_checking_flag
 	grad_thetavec = mla_neuon_network_generate_numercial_gradient(X, y, thetavec, ...
 							n_input_layer, n_hidden_layer, n_output_layer, num_hidden_layer, lambda);
-	diff_grad = grad_thetavec - gradientvec;
-	index = find(diff_grad > 0.001);
-	if size(index,1) > 0
+	diff_grad = norm(grad_thetavec - gradientvec) / norm(grad_thetavec + gradientvec);
+	if diff_grad > 1e-6
 		printf('numerical checking failed\n');
 		exit();
 	end;

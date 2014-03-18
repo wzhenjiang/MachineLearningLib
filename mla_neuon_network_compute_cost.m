@@ -16,6 +16,6 @@ else
 	regularization_factor = 0;
 end;
 
-cost = 1 / m * sum(sum(cost_matrix)) + regularization_factor;
+cost = 1 / m * sum(sum(cost_matrix))  + regularization_factor;
 
 end

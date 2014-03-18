@@ -74,6 +74,11 @@ cost = mla_neuon_network_compute_cost(a_output,y, lambda, Theta1, [], Theta2);
 printf(['Cost at parameters (loaded from ex4weights): %f '...
          '\n(this value should be about 0.383770)\n'], cost);
 
+lambda = 3;
+cost = mla_neuon_network_compute_cost(a_output,y, lambda, Theta1, [], Theta2);
+
+printf(['\n\nCost at (fixed) debugging parameters (w/ lambda = 3): %f ' ...
+         '\n(this value should be about 0.576051)\n\n'], cost);
 
 fprintf('\nEvaluating sigmoid gradient...\n')
 
@@ -90,70 +95,45 @@ initial_nn_params = mla_neuon_network_theta_initialization(input_layer_size, hid
 %% ==================== start to check cost function ==================================
 printf('\nChecking Backward Propagation... \n');
 
-lambda = 0;
-
-n_input_layer = 3;
-n_hidden_layer = 5;
-n_output_layer = 3;
-num_hidden_layer = 3;
-m = 5;
-
-W = zeros(n_hidden_layer, 1 + n_input_layer);
-Theta1 = reshape(sin(1:numel(W)), size(W)) / 10;
-
-W = zeros(n_hidden_layer, 1 + n_hidden_layer);
-Thetax = reshape(sin(1:numel(W)), size(W)) / 10;
-Theta_X = [Thetax;Thetax];
-
-W = zeros(n_output_layer, 1 + n_hidden_layer);
-Theta2 = reshape(sin(1:numel(W)), size(W)) / 10;
-W = zeros(m, n_input_layer);  %-1?
-X = reshape(sin(1:numel(W)), size(W)) / 10;
-
-y  = 1 + mod(1:m, n_output_layer)';
-y_matrix = zeros(m,n_output_layer);
-for i=1:m
-	y_matrix(i,y(i)) = 1;
-end;
-y = y_matrix;
-
-% Unroll parameters
-nn_params = [Theta1(:) ; Theta_X(:); Theta2(:)];
-
-% Short hand for cost function
-cost_func = @(p) mla_neuon_network_cost_function(p, X, y, lambda, n_hidden_layer, num_hidden_layer);
-printf('call cost function\n');
-[cost, grad] = cost_func(nn_params);
-printf('done\n');
-numgrad = mla_neuon_network_generate_numercial_gradient(X, y, nn_params, ...
-							n_input_layer, n_hidden_layer, n_output_layer, num_hidden_layer, lambda);
-
-% Visually examine the two gradient computations.  The two columns
-% you get should be very similar. 
-k = [1: 98]';
-disp([k numgrad grad]);
-
-diff = numgrad - grad;
-index = find(diff > 0.001);
-printf(['The above two columns you get should be very similar.\n' ...
-         '(Left-Your Numerical Gradient, Right-Analytical Gradient)\n\n']);
-
-% Evaluate the norm of the difference between two solutions.  
-% If you have a correct implementation, and assuming you used EPSILON = 0.0001 
-% in computeNumericalGradient.m, then diff below should be less than 1e-9
-diff = norm(numgrad-grad)/norm(numgrad+grad);
-
-printf(['If your backpropagation implementation is correct, then \n' ...
-         'the relative difference will be small (less than 1e-9). \n' ...
-         '\nRelative Difference: %g\n'], diff);
-
+test_neuon_network_check_gradient(0);
 
 printf('\nBackward propagation checked.\n');
 
-index
+printf('\nChecking Backpropagation (w/ Regularization) ... \n')
 
+%  Check gradients by running checkNNGradients
+lambda = 3;
+[X,y,theta_input, theta_hidden, theta_output,num_hidden_layer, n_hidden_layer] = test_neuon_network_check_gradient(lambda);
+printf('\nBackward propagation checked.\n');
 
+%%  ======================== start to train ============================
+printf('\nTraining Neural Network... \n')
 
+%  After you have completed the assignment, change the MaxIter to a larger
+%  value to see how more training helps.
+options = optimset('MaxIter', 50);
+
+%  You should also try different values of lambda
+lambda = 1;
+
+costFunction = @(p) nnCostFunction(p, ...
+                                   input_layer_size, ...
+                                   hidden_layer_size, ...
+                                   num_labels, X, y, lambda);
+
+% Now, costFunction is a function that takes in only one argument (the
+% neural network parameters)
+[nn_params, cost] = fmincg(costFunction, initial_nn_params, options);
+
+% Obtain Theta1 and Theta2 back from nn_params
+Theta1 = reshape(nn_params(1:hidden_layer_size * (input_layer_size + 1)), ...
+                 hidden_layer_size, (input_layer_size + 1));
+
+Theta2 = reshape(nn_params((1 + (hidden_layer_size * (input_layer_size + 1))):end), ...
+                 num_labels, (hidden_layer_size + 1));
+
+fprintf('Program paused. Press enter to continue.\n');
+pause;
 
 
 
