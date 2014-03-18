@@ -40,7 +40,9 @@ numgrad = mla_neuon_network_generate_numercial_gradient(X, y, nn_params, ...
 % Visually examine the two gradient computations.  The two columns
 % you get should be very similar. 
 k = [1: 38]';
-disp([numgrad grad]);
+
+% disp([numgrad grad]);
+printf('data display disabled!\n');
 
 printf(['The above two columns you get should be very similar.\n' ...
          '(Left-Your Numerical Gradient, Right-Analytical Gradient)\n\n']);
